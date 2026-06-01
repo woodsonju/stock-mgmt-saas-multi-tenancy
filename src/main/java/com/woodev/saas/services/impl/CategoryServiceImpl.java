@@ -2,6 +2,7 @@ package com.woodev.saas.services.impl;
 
 import com.woodev.saas.common.PageResponse;
 import com.woodev.saas.entities.Category;
+import com.woodev.saas.exceptions.DuplicateResourceException;
 import com.woodev.saas.mappers.CategoryMapper;
 import com.woodev.saas.repositories.CategoryRepository;
 import com.woodev.saas.requests.CategoryRequest;
@@ -86,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
         final Optional<Category> category = this.categoryRepository.findByNameIgnoreCase(categoryName);
         if(category.isPresent()) {
             log.debug("Category already exists");
-            throw new RuntimeException("Category already exists"); //we will use custom exception later
+            throw new DuplicateResourceException("Category already exists");
         }
     }
 }

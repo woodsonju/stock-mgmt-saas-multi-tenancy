@@ -3,6 +3,7 @@ package com.woodev.saas.services.impl;
 import com.woodev.saas.common.PageResponse;
 import com.woodev.saas.entities.Category;
 import com.woodev.saas.entities.Product;
+import com.woodev.saas.exceptions.DuplicateResourceException;
 import com.woodev.saas.mappers.ProductMapper;
 import com.woodev.saas.repositories.CategoryRepository;
 import com.woodev.saas.repositories.ProductRepository;
@@ -84,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
         final Optional<Product> product = this.productRepository.findByReferenceIgnoreCase(reference);
         if(product.isPresent()) {
             log.debug("Product already exists");
-            throw new RuntimeException("Product already exists"); //we will use custom exception later
+            throw new DuplicateResourceException("Product already exists"); //we will use custom exception later
         }
     }
 
