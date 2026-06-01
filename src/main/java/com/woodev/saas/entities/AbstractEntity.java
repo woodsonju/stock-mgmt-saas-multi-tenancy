@@ -1,11 +1,16 @@
 package com.woodev.saas.entities;
 
+import com.woodev.saas.config.TenantContext;
+import com.woodev.saas.config.TenantFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,6 +28,29 @@ import static jakarta.persistence.GenerationType.UUID;
 @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@FilterDef(
+        name = "tenantFilter",
+        // ↑ Nom unique du filtre
+        // DOIT correspondre exactement à :
+        // session.enableFilter("tenantFilter")
+        //                       ↑ même nom !
+
+        parameters = @ParamDef(
+                name = "tenantId", type=String.class),  //tenantId correspond au tenantId défini dans TenantHibernateFilter
+                // ↑ Nom du paramètre
+                // DOIT correspondre à :
+                // .setParameter("tenantId", value)
+                //               ↑ même nom !
+                // ET à :tenantId dans la condition
+        defaultCondition = "tenant_id = :tenantId"
+        // ↑ La clause WHERE ajoutée automatiquement
+        // :tenantId = placeholder remplacé par
+        //             la valeur injectée via setParameter()
+        // Résultat : WHERE tenant_id = 'alpha'
+)
+@Filter(name = "tenantFilter")
+// ↑ "Applique ce filtre à cette entité"
+// DOIT correspondre au name du @FilterDef
 public class AbstractEntity {
 
     @Id
@@ -32,6 +60,9 @@ public class AbstractEntity {
     //Mais vous pouvez le modifier directement dans la base
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
+
+    @Column(name = "tenant_id", nullable = false)
+    private String tenantId;
 
     //updatable = false, cela veut dire qu'on ne doit pas modifier la valeur de CreatedAt une fois insérée.
     @CreatedDate
@@ -67,6 +98,10 @@ public class AbstractEntity {
         //TODO : this has to be deleted once security is implemented
         if(this.createdBy == null) {
             this.createdBy = "SYSTEM";
+        }
+
+        if(this.tenantId == null) {
+            this.tenantId =  TenantContext.getCurrentTenant();
         }
 
     }
