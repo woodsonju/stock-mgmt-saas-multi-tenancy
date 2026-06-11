@@ -4,6 +4,7 @@ import com.woodev.saas.common.PageResponse;
 import com.woodev.saas.requests.RegisterTenantRequest;
 import com.woodev.saas.responses.TenantResponse;
 import com.woodev.saas.services.TenantService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/tenants")
 @RequiredArgsConstructor
+@Tag(name = "Tenant", description = "Tenant API")
 public class TenantController {
 
     private final TenantService tenantService;

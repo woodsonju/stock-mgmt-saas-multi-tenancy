@@ -58,5 +58,10 @@ app:
     public-key-path: ${JWT_PUBLIC_KEY_PATH:certs/public_key.pem}
     access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:86400000} # 86 400 000 ms = 86 400 secondes = 24 heures
 
-
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    enabled: true
+    operations-sorter: true
+    tags-sorter: alpha
 

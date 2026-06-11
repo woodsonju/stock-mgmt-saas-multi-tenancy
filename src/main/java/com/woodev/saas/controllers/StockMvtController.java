@@ -4,6 +4,7 @@ import com.woodev.saas.common.PageResponse;
 import com.woodev.saas.requests.StockMvtRequest;
 import com.woodev.saas.responses.StockMvtResponse;
 import com.woodev.saas.services.StockMvtService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/stocks")
 @RequiredArgsConstructor
+@Tag(name = "StockMvt", description = "Stock Mvt API")
 public class StockMvtController {
 
     private final StockMvtService stockMvtService;
