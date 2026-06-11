@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//Création d'un classe Page personnalisée nommé PageResponse
+//Création d'une classe Page personnalisée nommé PageResponse
 //contenant moins d'informations que la classe Page de Spring Data
 public class PageResponse<T> {
 

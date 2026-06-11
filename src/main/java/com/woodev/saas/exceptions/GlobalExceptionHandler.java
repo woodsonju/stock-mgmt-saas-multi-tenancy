@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,12 +38,11 @@ public class GlobalExceptionHandler {
 
 
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(value = {EntityNotFoundException.class, UsernameNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleExcpetion(
             final EntityNotFoundException ex,
             final HttpServletRequest request) {
 
-        log.error("Entity not found", ex);
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .code("NOT_FOUND")
                 .message(ex.getMessage())
@@ -82,10 +83,28 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    public ResponseEntity<ErrorResponse> handleExcpetion(
+            final BadCredentialsException ex,
+            final HttpServletRequest request) {
+
+        final ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Login and/or password are incorrect")
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
 
     private HttpStatus getHttpStatus(BusinessException ex) {
         if(ex instanceof DuplicateResourceException) {
             return HttpStatus.CONFLICT;
+        } else if(ex instanceof UnauthorizeException) {
+            return HttpStatus.UNAUTHORIZED;
+        } else if(ex instanceof TenantProvisioningException) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        } else if(ex instanceof InvalidRequestException) {
+            return HttpStatus.BAD_REQUEST;
         }
         return HttpStatus.BAD_REQUEST;
     }

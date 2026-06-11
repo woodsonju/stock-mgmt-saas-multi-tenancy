@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
  *      On pourrait utiliser un HandlerInterceptor ou un @EventListener.
  *      L'aspect est plus propre car il s'exécute au plus proche de la couche de données
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TenantHibernateFilter {
 
     @PersistenceContext

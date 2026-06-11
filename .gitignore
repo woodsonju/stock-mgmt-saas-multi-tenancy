@@ -45,3 +45,9 @@ build/
 *.log
 logs/
 log/
+
+# ===================================
+# SÉCURITÉ — Clés RSA
+# ===================================
+src/main/resources/certs/private_key.pem
+src/main/resources/certs/public_key.pem

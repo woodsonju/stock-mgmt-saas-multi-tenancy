@@ -16,6 +16,8 @@ package com.woodev.saas.config;
 public class TenantContext {
 
     private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
+    private static final ThreadLocal<String> CURRENT_SCHEMA = new ThreadLocal<>();
+
 
     /**
      * Recupere l'identifiant du tenant pour le thread courant.
@@ -25,6 +27,10 @@ public class TenantContext {
         return CURRENT_TENANT.get();
     }
 
+    public static String getCurrentSchema() {
+        return CURRENT_SCHEMA.get();
+    }
+
     /**
      * Definit l'identifiant du tenant pour le thread courant.
      * @param tenant
@@ -32,6 +38,10 @@ public class TenantContext {
     public static void setCurrentTenant(final String tenant) {
         CURRENT_TENANT.set(tenant);
     }
+    public static void setCurrentSchema(String schemaName) {
+        CURRENT_SCHEMA.set(schemaName);
+    }
+
 
     //Nettoyer le contexte
     /**
@@ -42,6 +52,8 @@ public class TenantContext {
      */
     public static void clear() {
         CURRENT_TENANT.remove();
+        CURRENT_SCHEMA.remove();
     }
+
 
 }
